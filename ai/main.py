@@ -6,6 +6,16 @@ import csv
 from datetime import datetime
 
 
+
+# Define linear regression expression y
+def linreg(x):
+    y = weight*x + bias
+    return y
+
+def squared_error(y_pred, y_true):
+    return tf.reduce_mean(tf.square(y_pred - y_true))
+
+
 # Define the file path
 file_path = "new_dataset.txt"
 
@@ -71,9 +81,36 @@ learning_rate = 0.01
 training_epochs = 100
 
 
-plt.scatter(x_train, y_train)
 
+# declare weights
+weight = tf.Variable(0.)
+bias = tf.Variable(0.)
+
+
+# train model
+for epoch in range(training_epochs):
+
+# Compute loss within Gradient Tape context
+    with tf.GradientTape() as tape:
+        y_predicted = linreg(x_train)
+        loss = squared_error(y_predicted, y_train)
+    
+# Get gradients
+gradients = tape.gradient(loss, [weight,bias])
+
+# Adjust weights
+weight.assign_sub(gradients[0]*learning_rate)
+bias.assign_sub(gradients[1]*learning_rate)
+
+# Print output
+print(f"Epoch count {epoch}: Loss value: {loss.numpy()}")
+
+
+
+plt.scatter(x_train, y_train)
 plt.xlabel('Time')
 plt.ylabel('Global Active Power')
 plt.title('Global Active Power vs. Time')
+plt.plot(x_train, linreg(x_train), 'r')
 plt.show()
+
