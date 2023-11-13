@@ -2,6 +2,8 @@
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+from matplotlib import style
 import csv
 from datetime import datetime
 from flask import Flask, request, render_template   
@@ -158,34 +160,51 @@ model = tf.keras.models.Sequential([
 # Compile the model (optional)
 model.compile(loss='mae', optimizer='adam')
 
-model.fit(x_train, y_train, epochs=30, batch_size=32)
+model.fit(x_train, y_train, epochs=15, batch_size=32)
 
 # Generate a plot of the neural network architecture
 tf.keras.utils.plot_model(model, to_file='neural_network.png', show_shapes=True)
 
+fig = plt.figure()
 
+plt.scatter(x_train, y_train)
 
 ################### Plot
-plt.scatter(x_train, y_train)
-for i in range(0, 240, 1):
-    x_test = [i/10]
+def predictAndDraw(i):
 
+    x_out = []
+    y_out = []
+    x_test = [i/41]
+    x_test = [float(input(""))]
+    print(type(x_test[0]))
     y_test = model.predict(x_test)
-
+    
     print(y_test)
 
-    plt.scatter(x_test, y_test, color='red')
+    x_out.append(x_test)
+    y_out.append(y_test)
+    plt.scatter(x_out, y_out, color='red')
 
+# def animate():
+#     for i in range(0, 2400, 1):
+#         predictAndDraw(i)
+        
+
+
+
+ani = animation.FuncAnimation(fig ,predictAndDraw, interval=3, frames=1000)
 
 plt.xlabel('Time')
 plt.ylabel('Global Active Power')
 plt.title('Global Active Power vs. Time')
+plt.draw()
 plt.show()
+
 ###################
 
 
 ####
 
 
-if __name__ == "__main__":
-    app.run()
+# if __name__ == "__main__":
+#     app.run()
