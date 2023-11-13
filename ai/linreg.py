@@ -64,12 +64,12 @@ for data in data_objects:
     date = data['Date']
     time = data['Time']
 
-    global_active_power = data['Global_active_power']
-    if (date.year == 2010):
+    Global_active_power = data['Voltage']
+
     # if (date.year == 2010) and (date.month == 1) and (date.day == 25) and (time.minute == 0):
-        float_value = time.hour + (time.minute / 60)
-        x_train.append(float_value)
-        y_train.append(global_active_power)
+    float_value = time.hour + (time.minute / 60)
+    x_train.append(float_value)
+    y_train.append(Global_active_power)
 
 
 print(x_train)
