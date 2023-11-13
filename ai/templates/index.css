@@ -1,0 +1,24 @@
+.container {
+    margin: 20px auto;
+    width: 300px;
+    text-align: center;
+}
+
+.input-container {
+    margin-bottom: 10px;
+}
+
+#input-value {
+    padding: 5px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#submit-button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}

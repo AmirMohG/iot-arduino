@@ -4,6 +4,27 @@ import numpy as np
 import matplotlib.pyplot as plt
 import csv
 from datetime import datetime
+from flask import Flask, request, render_template   
+app = Flask(__name__)
+
+
+@app.route("/", methods=["GET"])
+def index():
+    return render_template("index.html")
+
+@app.route("/ai", methods=["GET"])
+def greet():
+    value = float(request.args.get("value"))
+    if value:
+        x_test = [value]
+
+        y_test = model.predict(x_test)
+
+        return f"{y_test[0]}"
+    else:
+        return "value parameter required"
+
+
 
 
 # Define the file path
@@ -122,22 +143,32 @@ bias = tf.Variable(0.)
 model = tf.keras.models.Sequential([
     tf.keras.layers.Dense(64, activation='relu', input_shape=(1,)),
     tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(64, activation='relu'),
     tf.keras.layers.Dense(1)
 ])
 
+
 # Compile the model (optional)
-model.compile(loss='mean_squared_error', optimizer='adam')
-model.fit(x_train, y_train, epochs=100, batch_size=32)
+model.compile(loss='mae', optimizer='adam')
+
+model.fit(x_train, y_train, epochs=30, batch_size=32)
+
 # Generate a plot of the neural network architecture
 tf.keras.utils.plot_model(model, to_file='neural_network.png', show_shapes=True)
 
 
 
-
-
+################### Plot
 plt.scatter(x_train, y_train)
-for i in range(24):
-    x_test = [i]
+for i in range(0, 240, 1):
+    x_test = [i/10]
 
     y_test = model.predict(x_test)
 
@@ -145,10 +176,16 @@ for i in range(24):
 
     plt.scatter(x_test, y_test, color='red')
 
+
 plt.xlabel('Time')
 plt.ylabel('Global Active Power')
 plt.title('Global Active Power vs. Time')
 plt.show()
-# Display the plot
+###################
+
 
 ####
+
+
+if __name__ == "__main__":
+    app.run()

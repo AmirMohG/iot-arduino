@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Button Example</h1>
+        <div class="input-container">
+            <input type="number" id="input-value" placeholder="Enter a value" />
+        </div>
+        <button id="submit-button" onclick="submitValue()">Submit</button>
+    </div>
+
+    <script>
+        function submitValue() {
+            var value = document.getElementById("input-value").value;
+            window.location.href = "/ai?value=" + value;
+        }
+    </script>
+</body>
+
+</html>
