@@ -6,16 +6,6 @@ import csv
 from datetime import datetime
 
 
-
-# Define linear regression expression y
-def linreg(x):
-    y = weight*x + bias
-    return y
-
-def squared_error(y_pred, y_true):
-    return tf.reduce_mean(tf.square(y_pred - y_true))
-
-
 # Define the file path
 file_path = "new_dataset.txt"
 
@@ -64,7 +54,7 @@ for data in data_objects:
     date = data['Date']
     time = data['Time']
 
-    Global_active_power = data['Voltage']
+    Global_active_power = data['Global_active_power']
 
     # if (date.year == 2010) and (date.month == 1) and (date.day == 25) and (time.minute == 0):
     float_value = time.hour + (time.minute / 60)
@@ -72,10 +62,11 @@ for data in data_objects:
     y_train.append(Global_active_power)
 
 
+
 print(x_train)
 
 # Learning rate
-learning_rate = 0.01
+learning_rate = 0.1
 
 # Number of loops for training through all your data to update the parameters
 training_epochs = 100
@@ -83,34 +74,81 @@ training_epochs = 100
 
 
 # declare weights
+
+
 weight = tf.Variable(0.)
 bias = tf.Variable(0.)
 
 
-# train model
-for epoch in range(training_epochs):
 
-# Compute loss within Gradient Tape context
-    with tf.GradientTape() as tape:
-        y_predicted = linreg(x_train)
-        loss = squared_error(y_predicted, y_train)
+###### Maghz
+# # Define linear regression expression y
+# def linreg(x):
+#     y = weight*x + bias
+#     return y
+
+# def squared_error(y_pred, y_true):
+#     return tf.reduce_mean(tf.square(y_pred - y_true))
+# # train model
+# for epoch in range(training_epochs):
+
+# # Compute loss within Gradient Tape context
+#     with tf.GradientTape() as tape:
+#         y_predicted = linreg(x_train)
+#         loss = squared_error(y_predicted, y_train)
     
-# Get gradients
-gradients = tape.gradient(loss, [weight,bias])
+# # Get gradients
+# gradients = tape.gradient(loss, [weight,bias])
 
-# Adjust weights
-weight.assign_sub(gradients[0]*learning_rate)
-bias.assign_sub(gradients[1]*learning_rate)
+# # Adjust weights
+# weight.assign_sub(gradients[0]*learning_rate)
+# bias.assign_sub(gradients[1]*learning_rate)
 
-# Print output
-print(f"Epoch count {epoch}: Loss value: {loss.numpy()}")
+# # Print output
+# print(f"Epoch count {epoch}: Loss value: {loss.numpy()}")
+
+# plt.scatter(x_train, y_train)
+# plt.xlabel('Time')
+# plt.ylabel('Global Active Power')
+# plt.title('Global Active Power vs. Time')
+# plt.plot(x_train, linreg(x_train), 'r')
+# plt.show()
+
+######
+
+
+##### New maghz
+# Define your neural network model
+model = tf.keras.models.Sequential([
+    tf.keras.layers.Dense(64, activation='relu', input_shape=(1,)),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(1)
+])
+
+# Compile the model (optional)
+model.compile(loss='mean_squared_error', optimizer='adam')
+model.fit(x_train, y_train, epochs=100, batch_size=32)
+# Generate a plot of the neural network architecture
+tf.keras.utils.plot_model(model, to_file='neural_network.png', show_shapes=True)
+
+
 
 
 
 plt.scatter(x_train, y_train)
+for i in range(24):
+    x_test = [i]
+
+    y_test = model.predict(x_test)
+
+    print(y_test)
+
+    plt.scatter(x_test, y_test, color='red')
+
 plt.xlabel('Time')
 plt.ylabel('Global Active Power')
 plt.title('Global Active Power vs. Time')
-plt.plot(x_train, linreg(x_train), 'r')
 plt.show()
+# Display the plot
 
+####
