@@ -1,0 +1,3 @@
+source venv/bin/activate
+export XLA_FLAGS=--xla_gpu_cuda_data_dir=/usr/lib/cuda
+echo 0 | sudo tee -a /sys/bus/pci/devices/*/numa_node
