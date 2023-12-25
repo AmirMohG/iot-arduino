@@ -72,7 +72,6 @@ void loop()
   
   Display_feedback();
   String str="GET https://api.thingspeak.com/update?api_key=4LMSMLNCOF9WMUEK&field1=" + String(temperature);
-  // String str="GET https://bpms.rso-co.ir/aaaaaaaaaaaaaaaaaaaaa" + String(temperature);
 
 
   Serial.println(str);
